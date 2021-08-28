@@ -10,9 +10,10 @@ interface LoginViewProps {
   hideCountryCodeModal: () => void;
   isCountryCodeModalVisible: boolean;
   onCountryCodeItemPress: (countryCode: string) => void;
+  mobile: string;
   onMobileChangeText: (mobile: string) => void;
   onLoginPress: () => void;
-  isDoingLogin: boolean;
+  isLoading: boolean;
 }
 export default ({
   countryCode,
@@ -20,9 +21,10 @@ export default ({
   hideCountryCodeModal,
   isCountryCodeModalVisible,
   onCountryCodeItemPress,
+  mobile,
   onMobileChangeText,
   onLoginPress,
-  isDoingLogin,
+  isLoading,
 }: LoginViewProps) => {
   return (
     <View style={styles.container}>
@@ -38,6 +40,7 @@ export default ({
           label={'mobile'}
           keyboardType={'phone-pad'}
           textContentType={'telephoneNumber'}
+          value={mobile}
           onChangeText={onMobileChangeText}
           style={styles.mobileTextInput}
           mode={'flat'}
@@ -45,7 +48,7 @@ export default ({
       </View>
       <Button
         onPress={onLoginPress}
-        loading={isDoingLogin}
+        loading={isLoading}
         mode={'contained'}
         style={styles.loginButton}
         contentStyle={styles.loginButtonContent}>

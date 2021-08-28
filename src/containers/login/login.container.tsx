@@ -1,31 +1,56 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {
+  currentUserActions,
+  useCreateCurrentUserMutation,
+} from '@store/current-user';
 import LoginView from './login.view';
+import {useShallowPickSelector} from '@hooks/useSelector';
+import {useRootNavigation} from '@containers/root-router';
 
 export default () => {
-  const [countryCode, setCountryCode] = useState<string>('+98');
-  const [mobile, setMobile] = useState<string>('');
-  const [isCountryCodeModalVisible, setIsCountryCodeVisible] =
+  const [isCountryCodeModalVisible, setIsCountryCodeModalVisible] =
     useState<boolean>(false);
-  const [isDoingLogin, setIsDoingLogin] = useState<boolean>(false);
+
+  const rootNavigation = useRootNavigation();
+  const dispatch = useDispatch();
+  const {countryCode, mobile} = useShallowPickSelector('currentUser', [
+    'countryCode',
+    'mobile',
+  ]);
+
   const onCountryCodeFieldPress = () => {
-    setIsCountryCodeVisible(true);
+    setIsCountryCodeModalVisible(true);
   };
+
   const hideCountryCodeModal = () => {
-    setIsCountryCodeVisible(false);
+    setIsCountryCodeModalVisible(false);
   };
-  const onCountryCodeItemPress = (countryCode: string) => {
-    setCountryCode(countryCode);
-    setIsCountryCodeVisible(false);
+
+  const onCountryCodeItemPress = (_countryCode: string) => {
+    dispatch(currentUserActions.setCountryCode(_countryCode));
+    setIsCountryCodeModalVisible(false);
   };
+
   const onMobileChangeText = (_mobile: string) => {
-    setMobile(_mobile);
+    dispatch(currentUserActions.setMobile(_mobile));
   };
+
+  const [createCurrentUser, {isLoading, isSuccess}] =
+    useCreateCurrentUserMutation();
+
   const onLoginPress = () => {
-    setIsDoingLogin(true);
-    console.log({countryCode, mobile});
-    setIsDoingLogin(false);
+    createCurrentUser({
+      countryCode,
+      mobile,
+    });
   };
+
+  useEffect(() => {
+    if (isSuccess) rootNavigation.navigate('verification');
+  }, [isSuccess]);
+
   return (
     <LoginView
       countryCode={countryCode}
@@ -33,9 +58,10 @@ export default () => {
       hideCountryCodeModal={hideCountryCodeModal}
       isCountryCodeModalVisible={isCountryCodeModalVisible}
       onCountryCodeItemPress={onCountryCodeItemPress}
+      mobile={mobile}
       onMobileChangeText={onMobileChangeText}
       onLoginPress={onLoginPress}
-      isDoingLogin={isDoingLogin}
+      isLoading={isLoading}
     />
   );
 };
