@@ -1,5 +1,9 @@
 import * as React from 'react';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -7,22 +11,36 @@ import {
 import {Login} from '@containers/login';
 import {Verification} from '@containers/verification';
 import {Splash} from '@containers/splash';
-import {Home} from '@containers/home';
+import TabsRouter from '@containers/tabs/tabs.router';
 import {useGetCurrentUserQuery} from '@store/current-user';
 import {useShallowPickSelector} from '@hooks/useSelector';
 
 export type RootRouterParams = {
   splash: {};
   login: {};
-  verification: {};
-  home: {};
+  verification: {isUserNew: boolean};
+  tabs: {};
 };
+
+export interface RouteProps<
+  T extends Record<string, object | undefined>,
+  K extends keyof T,
+> {
+  navigation: NativeStackNavigationProp<T, K>;
+  route: RouteProp<T, K>;
+}
+
+export interface RootRouterProps<K extends keyof RootRouterParams>
+  extends RouteProps<RootRouterParams, K> {}
 
 const Stack = createNativeStackNavigator<RootRouterParams>();
 
 const Router = () => {
   const {token} = useShallowPickSelector('currentUser', ['token']);
-  const {data, error, isLoading} = useGetCurrentUserQuery();
+  const {data, error, isLoading, isSuccess} = useGetCurrentUserQuery(
+    undefined,
+    {skip: !token},
+  );
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="splash">
@@ -32,10 +50,10 @@ const Router = () => {
             component={Splash}
             options={{title: 'atop'}}
           />
-        ) : data?.token ? (
+        ) : isSuccess ? (
           <Stack.Screen
-            name="home"
-            component={Home}
+            name="tabs"
+            component={TabsRouter}
             options={{title: 'atop'}}
           />
         ) : (

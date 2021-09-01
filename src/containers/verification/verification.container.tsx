@@ -3,44 +3,73 @@ import {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {
   currentUserActions,
-  useEditCurrentUserMutation,
+  useGetCurrentUserQuery,
+  useUpsertUserMutation,
 } from '@store/current-user';
 import VerificationView from './verification.view';
 import {useShallowPickSelector} from '@hooks/useSelector';
-import {useRootNavigation} from '@containers/root-router';
+import {RootRouterProps, useRootNavigation} from '@containers/root.router';
 
-export default () => {
+export default ({
+  route: {
+    params: {isUserNew},
+  },
+}: RootRouterProps<'verification'>) => {
   const rootNavigation = useRootNavigation();
   const dispatch = useDispatch();
-  const {countryCode, mobile, verificationCode} = useShallowPickSelector(
-    'currentUser',
-    ['countryCode', 'mobile', 'verificationCode'],
-  );
+  const {countryCode, mobile, verificationCode, name, token} =
+    useShallowPickSelector('currentUser', [
+      'countryCode',
+      'mobile',
+      'verificationCode',
+      'name',
+      'token',
+    ]);
 
   const onVerificationCodeChangeText = (_verificationCode: string) => {
     dispatch(currentUserActions.setVerificationCode(_verificationCode));
   };
 
-  const [editCurrentUser, {isLoading, isSuccess}] =
-    useEditCurrentUserMutation();
-
-  const onVerifyPress = () => {
-    if (verificationCode)
-      editCurrentUser({
-        countryCode,
-        mobile,
-        verificationCode,
-      });
+  const onNameChangeText = (_name: string) => {
+    dispatch(currentUserActions.setName(_name));
   };
 
+  const [upsertUser, {isLoading, isSuccess, data}] = useUpsertUserMutation();
+
+  const onVerifyPress = () => {
+    if (verificationCode) {
+      if (isUserNew) {
+        upsertUser({
+          countryCode,
+          mobile,
+          verificationCode,
+          name,
+        });
+      } else {
+        upsertUser({
+          countryCode,
+          mobile,
+          verificationCode,
+        });
+      }
+    }
+  };
+
+  const {} = useGetCurrentUserQuery(undefined, {skip: !token});
+
   useEffect(() => {
-    if (isSuccess) rootNavigation.navigate('home');
-  }, [isSuccess]);
+    if (isSuccess && data) {
+      dispatch(currentUserActions.setToken(data.token));
+    }
+  }, [isSuccess, data]);
 
   return (
     <VerificationView
       verificationCode={verificationCode as string}
       onVerificationCodeChangeText={onVerificationCodeChangeText}
+      isUserNew={isUserNew}
+      name={name}
+      onNameChangeText={onNameChangeText}
       onVerifyPress={onVerifyPress}
       isLoading={isLoading}
     />

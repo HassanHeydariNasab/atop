@@ -5,7 +5,7 @@ import {useGetCurrentUserQuery} from '@store/current-user';
 import HomeView from './home.view';
 import {useCreateCurrentUserMutation} from '@store/current-user';
 import {useShallowPickSelector} from '@hooks/useSelector';
-import {useRootNavigation} from '@containers/root-router';
+import {useRootNavigation} from '@containers/root.router';
 
 export default () => {
   const rootNavigation = useRootNavigation();

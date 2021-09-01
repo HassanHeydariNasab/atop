@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import {batch, useDispatch} from 'react-redux';
 import {
   currentUserActions,
-  useCreateCurrentUserMutation,
+  useUpsertVerificationMutation,
 } from '@store/current-user';
 import LoginView from './login.view';
 import {useShallowPickSelector} from '@hooks/useSelector';
-import {useRootNavigation} from '@containers/root-router';
+import {useRootNavigation} from '@containers/root.router';
+import {appActions} from '@store/app';
 
 export default () => {
   const [isCountryCodeModalVisible, setIsCountryCodeModalVisible] =
@@ -37,19 +38,21 @@ export default () => {
     dispatch(currentUserActions.setMobile(_mobile));
   };
 
-  const [createCurrentUser, {isLoading, isSuccess}] =
-    useCreateCurrentUserMutation();
+  const [upsertVerification, {isLoading, isSuccess, data}] =
+    useUpsertVerificationMutation();
 
   const onLoginPress = () => {
-    createCurrentUser({
+    upsertVerification({
       countryCode,
       mobile,
     });
   };
 
   useEffect(() => {
-    if (isSuccess) rootNavigation.navigate('verification');
-  }, [isSuccess]);
+    if (isSuccess && data) {
+      rootNavigation.navigate('verification', {isUserNew: data.isUserNew});
+    }
+  }, [isSuccess, data]);
 
   return (
     <LoginView

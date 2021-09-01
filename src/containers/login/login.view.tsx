@@ -40,6 +40,9 @@ export default ({
           label={'mobile'}
           keyboardType={'phone-pad'}
           textContentType={'telephoneNumber'}
+          autoFocus
+          onSubmitEditing={onLoginPress}
+          returnKeyType={'next'}
           value={mobile}
           onChangeText={onMobileChangeText}
           style={styles.mobileTextInput}
