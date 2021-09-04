@@ -9,6 +9,10 @@ interface GetPostsRequest {
   limit: number;
 }
 
+interface GetPostsResponse {
+  results: Post[];
+}
+
 interface CreatePostRequest {
   text: string;
 }
@@ -35,7 +39,7 @@ export const postApi = createApi({
     },
   }),
   endpoints: builder => ({
-    getPosts: builder.query<Post[], GetPostsRequest>({
+    getPosts: builder.query<GetPostsResponse, GetPostsRequest>({
       query: ({offset, limit}) => `/v1/posts?offset=${offset}&limit=${limit}`,
     }),
     createPost: builder.mutation<CreatePostResponse, CreatePostRequest>({
@@ -50,5 +54,9 @@ export const postApi = createApi({
   }),
 });
 
-export const {useGetPostsQuery, useCreatePostMutation, useLikePostMutation} =
-  postApi;
+export const {
+  useGetPostsQuery,
+  useCreatePostMutation,
+  useLikePostMutation,
+  util: postApiUtil,
+} = postApi;

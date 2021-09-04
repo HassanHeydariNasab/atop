@@ -5,18 +5,22 @@ import {rtkQueryErrorLogger} from './middlewares';
 import {appReducer} from './app';
 import {currentUserReducer} from './current-user';
 import {currentUserApi} from './current-user/current-user.api';
+import {postApi, postReducer} from './post';
 
 export const store = configureStore({
   reducer: {
+    app: appReducer,
     currentUser: currentUserReducer,
     [currentUserApi.reducerPath]: currentUserApi.reducer,
-    app: appReducer,
+    post: postReducer,
+    [postApi.reducerPath]: postApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
-      .concat(logger)
+      //.concat(logger)
       .concat(rtkQueryErrorLogger)
-      .concat(currentUserApi.middleware),
+      .concat(currentUserApi.middleware)
+      .concat(postApi.middleware),
 });
 setupListeners(store.dispatch);
 

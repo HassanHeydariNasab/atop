@@ -36,40 +36,29 @@ export interface RootRouterProps<K extends keyof RootRouterParams>
 const Stack = createNativeStackNavigator<RootRouterParams>();
 
 const Router = () => {
-  const {token} = useShallowPickSelector('currentUser', ['token']);
-  const {data, error, isLoading, isSuccess} = useGetCurrentUserQuery(
-    undefined,
-    {skip: !token},
-  );
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="splash">
-        {isLoading ? (
-          <Stack.Screen
-            name="splash"
-            component={Splash}
-            options={{title: 'atop'}}
-          />
-        ) : isSuccess ? (
-          <Stack.Screen
-            name="tabs"
-            component={TabsRouter}
-            options={{title: 'atop'}}
-          />
-        ) : (
-          <>
-            <Stack.Screen
-              name="login"
-              component={Login}
-              options={{title: 'Login'}}
-            />
-            <Stack.Screen
-              name="verification"
-              component={Verification}
-              options={{title: 'Verification'}}
-            />
-          </>
-        )}
+        <Stack.Screen
+          name="splash"
+          component={Splash}
+          options={{title: 'atop', headerShown: false}}
+        />
+        <Stack.Screen
+          name="tabs"
+          component={TabsRouter}
+          options={{title: 'atop', headerBackVisible: false}}
+        />
+        <Stack.Screen
+          name="login"
+          component={Login}
+          options={{title: 'Login'}}
+        />
+        <Stack.Screen
+          name="verification"
+          component={Verification}
+          options={{title: 'Verification'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

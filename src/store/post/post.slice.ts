@@ -1,45 +1,46 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {Post} from './post.model';
 
-interface Auth {
-  countryCode: string;
-  mobile: string;
-  verificationCode: string;
-  name: string;
-  token: string;
+interface LocalPostState {
+  text: string;
+  offset: number;
+  limit: number;
+  posts: Post[];
+  isRefreshing: boolean;
 }
 // local state
-const initialState: Auth = {
-  countryCode: '+98',
-  mobile: '9013792332',
-  verificationCode: '',
-  name: '',
-  token: '',
+const initialState: LocalPostState = {
+  text: '',
+  offset: 0,
+  limit: 10,
+  posts: [],
+  isRefreshing: false,
 };
 
-export const currentUserSlice = createSlice({
-  name: 'currentUser',
+export const postSlice = createSlice({
+  name: 'post',
   initialState,
   reducers: {
-    setCountryCode: (state, action: PayloadAction<string>) => {
-      state.countryCode = action.payload;
+    setText: (state, action: PayloadAction<string>) => {
+      state.text = action.payload;
     },
-    setMobile: (state, action: PayloadAction<string>) => {
-      let mobile = action.payload;
-      if (mobile === '0') {
-        mobile = mobile.substr(1);
-      }
-      state.mobile = mobile;
+    incrementOffset: (state, action: PayloadAction<void>) => {
+      state.offset += state.limit;
     },
-    setName: (state, action: PayloadAction<string>) => {
-      state.name = action.payload;
+    resetOffset: (state, action: PayloadAction<void>) => {
+      state.offset = 0;
+      state.posts = [];
     },
-    setVerificationCode: (state, action: PayloadAction<string>) => {
-      state.verificationCode = action.payload;
+    appendPosts: (state, action: PayloadAction<Post[]>) => {
+      state.posts = state.posts.concat(action.payload);
     },
-    setToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload;
+    setIsRefreshing: (state, action: PayloadAction<void>) => {
+      state.isRefreshing = true;
+    },
+    unsetIsRefreshing: (state, action: PayloadAction<void>) => {
+      state.isRefreshing = false;
     },
   },
 });
 
-export const {reducer, actions} = currentUserSlice;
+export const {reducer, actions} = postSlice;

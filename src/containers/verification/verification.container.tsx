@@ -9,6 +9,7 @@ import {
 import VerificationView from './verification.view';
 import {useShallowPickSelector} from '@hooks/useSelector';
 import {RootRouterProps, useRootNavigation} from '@containers/root.router';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default ({
   route: {
@@ -60,6 +61,7 @@ export default ({
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(currentUserActions.setToken(data.token));
+      AsyncStorage.setItem('token', data.token);
     }
   }, [isSuccess, data]);
 

@@ -32,6 +32,8 @@ export default () => {
             />
           );
         },
+        tabBarShowLabel: false,
+        headerShown: false,
       })}>
       <Tab.Screen name="home" component={Home} />
       <Tab.Screen name="write" component={Write} />
