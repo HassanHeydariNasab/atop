@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-import {batch, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {
   currentUserActions,
   useUpsertVerificationMutation,
@@ -8,7 +8,6 @@ import {
 import LoginView from './login.view';
 import {useShallowPickSelector} from '@hooks/useSelector';
 import {useRootNavigation} from '@containers/root.router';
-import {appActions} from '@store/app';
 
 export default () => {
   const [isCountryCodeModalVisible, setIsCountryCodeModalVisible] =

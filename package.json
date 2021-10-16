@@ -16,15 +16,19 @@
     "@react-navigation/native-stack": "^6.1.0",
     "@reduxjs/toolkit": "^1.6.1",
     "country-codes-list": "^1.6.8",
+    "native-base": "^3.2.1",
     "ramda": "^0.27.1",
     "react": "17.0.2",
     "react-native": "0.65.1",
-    "react-native-paper": "^4.9.2",
+    "react-native-flipper": "^0.115.0",
+    "react-native-mmkv": "^1.5.1",
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.5.0",
     "react-native-vector-icons": "^8.1.0",
     "react-redux": "^7.2.4",
-    "redux-logger": "^3.0.6"
+    "redux-flipper": "^2.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

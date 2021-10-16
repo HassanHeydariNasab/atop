@@ -5,6 +5,8 @@ import {useShallowPickSelector} from '@hooks/useSelector';
 import {postActions, postApiUtil, useGetPostsQuery} from '@store/post';
 import {Post} from '@store/post/post.model';
 import HomeView from './home.view';
+import {currentUserActions} from '@store/current-user';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default () => {
   const dispatch = useDispatch();

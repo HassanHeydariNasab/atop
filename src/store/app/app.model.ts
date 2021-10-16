@@ -1,4 +1,1 @@
-export interface App {
-  isSnackBarVisible: boolean;
-  snackBarMessage: string;
-}
+export interface App {}

@@ -1,6 +1,5 @@
 import {MiddlewareAPI, isRejectedWithValue, Middleware} from '@reduxjs/toolkit';
-import {batch} from 'react-redux';
-import {appActions} from './app';
+import {Toast} from 'native-base';
 
 export const rtkQueryErrorLogger: Middleware =
   ({dispatch, getState}: MiddlewareAPI) =>
@@ -8,11 +7,7 @@ export const rtkQueryErrorLogger: Middleware =
   action => {
     if (isRejectedWithValue(action)) {
       console.log(JSON.stringify(action));
-      batch(() => {
-        dispatch(appActions.setSnackBarMessage(action.payload.data.message));
-        dispatch(appActions.setIsSnackBarVisible(true));
-      });
+      Toast.show({title: 'Error', description: action.payload.data.message});
     }
-
     return next(action);
   };

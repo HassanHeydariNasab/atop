@@ -1,22 +1,12 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {App} from './app.model';
 
-const initialState: App = {
-  isSnackBarVisible: false,
-  snackBarMessage: '',
-};
+const initialState: App = {};
 
 export const appSlice = createSlice({
   name: 'app',
   initialState,
-  reducers: {
-    setIsSnackBarVisible: (state, action: PayloadAction<boolean>) => {
-      state.isSnackBarVisible = action.payload;
-    },
-    setSnackBarMessage: (state, action: PayloadAction<string>) => {
-      state.snackBarMessage = action.payload;
-    },
-  },
+  reducers: {},
 });
 
 export const {reducer, actions} = appSlice;
