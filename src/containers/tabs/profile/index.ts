@@ -1,1 +1,1 @@
-export {default as Profile} from './profile.container';
+export {ProfileContainer as ProfileScreen} from './profile.container';

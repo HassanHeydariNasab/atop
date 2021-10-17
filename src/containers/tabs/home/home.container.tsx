@@ -1,14 +1,14 @@
-import * as React from 'react';
-import {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
+import type {FC} from 'react';
 import {batch, useDispatch} from 'react-redux';
 import {useShallowPickSelector} from '@hooks/useSelector';
 import {postActions, postApiUtil, useGetPostsQuery} from '@store/post';
 import {Post} from '@store/post/post.model';
-import HomeView from './home.view';
+import {HomeView} from './home.view';
 import {currentUserActions} from '@store/current-user';
-import AsyncStorage from '@react-native-community/async-storage';
+import type {TabsRouterProps} from '../tabs.router';
 
-export default () => {
+export const HomeContainer: FC<TabsRouterProps<'home'>> = () => {
   const dispatch = useDispatch();
   const {offset, limit, posts, isRefreshing} = useShallowPickSelector('post', [
     'offset',

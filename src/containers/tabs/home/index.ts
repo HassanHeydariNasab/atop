@@ -1,1 +1,1 @@
-export {default as Home} from './home.container';
+export {HomeContainer as HomeScreen} from './home.container';

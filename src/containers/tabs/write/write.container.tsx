@@ -1,15 +1,15 @@
-import * as React from 'react';
-import {useState, useEffect} from 'react';
+import type {FC} from 'react';
+import React, {useEffect} from 'react';
 import {batch, useDispatch} from 'react-redux';
-import CreateView from './write.view';
+import {useToast} from 'native-base';
 import {postActions, useCreatePostMutation} from '@store/post';
 import {useShallowPickSelector} from '@hooks/useSelector';
-import {useTabsNavigation} from '../tabs.router';
-import {appActions} from '@store/app';
+import type {TabsRouterProps} from '../tabs.router';
+import {WriteView} from './write.view';
 
-export default () => {
-  const tabsNavigation = useTabsNavigation();
+export const WriteContainer: FC<TabsRouterProps<'write'>> = () => {
   const dispatch = useDispatch();
+  const toast = useToast();
   const {text} = useShallowPickSelector('post', ['text']);
   const onTextChangeText = (_text: string) => {
     dispatch(postActions.setText(_text));
@@ -23,15 +23,14 @@ export default () => {
   useEffect(() => {
     if (isSuccess) {
       batch(() => {
-        dispatch(appActions.setSnackBarMessage('Posted!'));
-        dispatch(appActions.setIsSnackBarVisible(true));
+        toast.show({title: 'done', description: 'posted successfully'});
         dispatch(postActions.setText(''));
       });
     }
   }, [isSuccess]);
 
   return (
-    <CreateView
+    <WriteView
       text={text || ''}
       onTextChangeText={onTextChangeText}
       onCreatePostPress={onCreatePostPress}

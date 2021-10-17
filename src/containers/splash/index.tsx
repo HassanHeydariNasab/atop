@@ -1,1 +1,1 @@
-export {default as Splash} from './splash.container';
+export {SplashContainer as SplashScreen} from './splash.container';

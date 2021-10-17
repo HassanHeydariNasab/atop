@@ -1,20 +1,17 @@
-import * as React from 'react';
-import {useColorScheme} from 'react-native';
+import React from 'react';
+import type {FC} from 'react';
 import {Provider as ReduxProvider} from 'react-redux';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {NativeBaseProvider} from 'native-base';
+import {theme} from '@styles/theme';
 import {store} from '@store/index';
-import Router from '@containers/root.router';
-import {SnackbarContainer} from '@containers/snackbar';
+import {RootRouter} from '@containers/root.router';
 
-const App: React.FC<{}> = ({}) => {
+export const App: FC<{}> = ({}) => {
   return (
     <ReduxProvider store={store}>
-      <PaperProvider>
-        <Router />
-        <SnackbarContainer />
-      </PaperProvider>
+      <NativeBaseProvider theme={theme}>
+        <RootRouter />
+      </NativeBaseProvider>
     </ReduxProvider>
   );
 };
-
-export default App;

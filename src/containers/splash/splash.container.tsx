@@ -1,28 +1,25 @@
-import * as React from 'react';
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
+import type {FC} from 'react';
 import {useDispatch} from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
-import SplashView from './splash.view';
-import {currentUserActions} from '@store/current-user';
 import {useShallowPickSelector} from '@hooks/useSelector';
 import {RootRouterProps} from '@containers/root.router';
+import {SplashView} from './splash.view';
 
-export default ({navigation}: RootRouterProps<'splash'>) => {
+export const SplashContainer: FC<RootRouterProps<'splash'>> = ({
+  navigation,
+}) => {
   const dispatch = useDispatch();
   const {token} = useShallowPickSelector('currentUser', ['token']);
+  const {rehydrated} = useShallowPickSelector('_persist', ['rehydrated']);
   useEffect(() => {
-    AsyncStorage.getItem('token').then(token => {
+    if (rehydrated) {
       if (token) {
-        dispatch(currentUserActions.setToken(token));
+        navigation.navigate('tabs', {});
       } else {
-        navigation.navigate('login');
+        navigation.navigate('login', {});
       }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (token) navigation.navigate('tabs');
-  }, [token]);
+    }
+  }, [rehydrated, token]);
 
   return <SplashView />;
 };

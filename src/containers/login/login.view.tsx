@@ -1,8 +1,17 @@
-import * as React from 'react';
-import {View, Text, Pressable, FlatList} from 'react-native';
-import {TextInput, Portal, List, Modal, Button} from 'react-native-paper';
+import React from 'react';
+import type {FC} from 'react';
+import {TouchableOpacity} from 'react-native';
+import {
+  Modal,
+  Button,
+  Input,
+  View,
+  FlatList,
+  Text,
+  Column,
+  Divider,
+} from 'native-base';
 import * as countryCodesList from 'country-codes-list';
-import {styles} from './login.styles';
 
 interface LoginViewProps {
   countryCode: string;
@@ -15,7 +24,7 @@ interface LoginViewProps {
   onLoginPress: () => void;
   isLoading: boolean;
 }
-export default ({
+export const LoginView: FC<LoginViewProps> = ({
   countryCode,
   onCountryCodeFieldPress,
   hideCountryCodeModal,
@@ -25,58 +34,59 @@ export default ({
   onMobileChangeText,
   onLoginPress,
   isLoading,
-}: LoginViewProps) => {
+}) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.mobileContainer}>
-        <Button
-          onPress={onCountryCodeFieldPress}
-          style={styles.countryCodeButton}
-          contentStyle={styles.countryCodeButtonContent}
-          mode={'contained'}>
-          {countryCode}
-        </Button>
-        <TextInput
-          label={'mobile'}
-          keyboardType={'phone-pad'}
-          textContentType={'telephoneNumber'}
-          autoFocus
-          onSubmitEditing={onLoginPress}
-          returnKeyType={'next'}
-          value={mobile}
-          onChangeText={onMobileChangeText}
-          style={styles.mobileTextInput}
-          mode={'flat'}
-        />
-      </View>
-      <Button
-        onPress={onLoginPress}
-        loading={isLoading}
-        mode={'contained'}
-        style={styles.loginButton}
-        contentStyle={styles.loginButtonContent}>
+    <Column flexGrow={1} justifyContent={'center'} px={'8'} space={'4'}>
+      <Input
+        placeholder={'mobile'}
+        keyboardType={'phone-pad'}
+        textContentType={'telephoneNumber'}
+        value={mobile}
+        onChangeText={onMobileChangeText}
+        InputLeftElement={
+          <Button onPress={onCountryCodeFieldPress} ml={'1'}>
+            {countryCode}
+          </Button>
+        }
+        variant={'outline'}
+        size={'md'}
+        autoFocus
+        onSubmitEditing={onLoginPress}
+        returnKeyType={'next'}
+      />
+      <Button onPress={onLoginPress} isLoading={isLoading}>
         Login
       </Button>
-      <Portal>
-        <Modal
-          visible={isCountryCodeModalVisible}
-          onDismiss={hideCountryCodeModal}
-          contentContainerStyle={styles.countryCodeModal}>
-          <FlatList
-            data={countryCodesList.customArray({
-              value: '{countryCallingCode}',
-              name: '{countryNameEn}',
-            })}
-            renderItem={({item}) => (
-              <List.Item
-                title={`${item.name} (+${item.value})`}
-                onPress={() => onCountryCodeItemPress(`+${item.value}`)}
-              />
-            )}
-            keyExtractor={item => item.name}
-          />
-        </Modal>
-      </Portal>
-    </View>
+      <Modal
+        isOpen={isCountryCodeModalVisible}
+        onClose={hideCountryCodeModal}
+        alignItems={'stretch'}
+        bg={'lightBackground'}>
+        <FlatList
+          data={countryCodesList.customArray({
+            value: '{countryCallingCode}',
+            name: '{countryNameEn}',
+          })}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              onPress={() => onCountryCodeItemPress(`+${item.value}`)}>
+              <Text
+                lineHeight={'5xl'}
+                px={'4'}>{`${item.name} (+${item.value})`}</Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.name}
+          ItemSeparatorComponent={() => <Divider />}
+          getItemLayout={(data, index) => ({
+            length: 64,
+            offset: 64 * index,
+            index,
+          })}
+          windowSize={3}
+          maxToRenderPerBatch={12}
+          initialNumToRender={12}
+        />
+      </Modal>
+    </Column>
   );
 };

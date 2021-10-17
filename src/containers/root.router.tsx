@@ -1,19 +1,19 @@
-import * as React from 'react';
+import React from 'react';
 import {
+  DarkTheme,
+  DefaultTheme,
   NavigationContainer,
-  RouteProp,
   useNavigation,
 } from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
-import {Login} from '@containers/login';
-import {Verification} from '@containers/verification';
-import {Splash} from '@containers/splash';
-import TabsRouter from '@containers/tabs/tabs.router';
-import {useGetCurrentUserQuery} from '@store/current-user';
-import {useShallowPickSelector} from '@hooks/useSelector';
+import type {RouteProp} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StatusBar, useColorMode} from 'native-base';
+import {LoginScreen} from '@containers/login';
+import {VerificationScreen} from '@containers/verification';
+import {SplashScreen} from '@containers/splash';
+import {TabsRouter} from '@containers/tabs/tabs.router';
+import {theme} from '@styles/theme';
 
 export type RootRouterParams = {
   splash: {};
@@ -33,32 +33,52 @@ export interface RouteProps<
 export interface RootRouterProps<K extends keyof RootRouterParams>
   extends RouteProps<RootRouterParams, K> {}
 
+const navigationLightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: theme.colors.primary[400],
+    background: theme.colors.lightBackground,
+    card: theme.colors.lightBackground,
+  },
+};
+
+const navigationDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: theme.colors.primary[400],
+    background: theme.colors.darkBackground,
+    card: theme.colors.darkBackground,
+  },
+};
+
 const Stack = createNativeStackNavigator<RootRouterParams>();
 
-const Router = () => {
+export const RootRouter = () => {
+  const {colorMode} = useColorMode();
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="splash">
-        <Stack.Screen
-          name="splash"
-          component={Splash}
-          options={{title: 'atop', headerShown: false}}
-        />
-        <Stack.Screen
-          name="tabs"
-          component={TabsRouter}
-          options={{title: 'atop', headerBackVisible: false}}
-        />
-        <Stack.Screen
-          name="login"
-          component={Login}
-          options={{title: 'Login'}}
-        />
-        <Stack.Screen
-          name="verification"
-          component={Verification}
-          options={{title: 'Verification'}}
-        />
+    <NavigationContainer
+      theme={
+        colorMode === 'light' ? navigationLightTheme : navigationDarkTheme
+      }>
+      <StatusBar
+        backgroundColor={
+          colorMode === 'light'
+            ? theme.colors.lightBackground
+            : theme.colors.darkBackground
+        }
+        barStyle={colorMode === 'light' ? 'dark-content' : 'light-content'}
+      />
+      <Stack.Navigator
+        initialRouteName="splash"
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="splash" component={SplashScreen} />
+        <Stack.Screen name="tabs" component={TabsRouter} />
+        <Stack.Screen name="login" component={LoginScreen} />
+        <Stack.Screen name="verification" component={VerificationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -66,5 +86,3 @@ const Router = () => {
 
 export const useRootNavigation = <K extends keyof RootRouterParams>() =>
   useNavigation<NativeStackNavigationProp<RootRouterParams, K>>();
-
-export default Router;

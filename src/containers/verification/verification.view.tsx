@@ -1,8 +1,7 @@
-import * as React from 'react';
-import {useRef} from 'react';
-import {View, TextInput as RNTextInput} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
-import {styles} from './verification.styles';
+import React, {useRef} from 'react';
+import type {FC} from 'react';
+import {TextInput as RNTextInput} from 'react-native';
+import {Button, Column, Input} from 'native-base';
 
 interface VerificationViewProps {
   verificationCode: string;
@@ -13,54 +12,46 @@ interface VerificationViewProps {
   onVerifyPress: () => void;
   isLoading: boolean;
 }
-export default ({
+export const VerificationView: FC<VerificationViewProps> = ({
   verificationCode,
   onVerificationCodeChangeText,
-  isUserNew: isNewUser,
+  isUserNew,
   name,
   onNameChangeText,
   onVerifyPress,
   isLoading,
-}: VerificationViewProps) => {
+}) => {
   const nameInputRef = useRef<RNTextInput>(null);
   const focusOnNameInput = () => {
     if (nameInputRef.current) nameInputRef?.current.focus();
   };
   return (
-    <View style={styles.container}>
-      <TextInput
-        label={'code'}
+    <Column flexGrow={1} justifyContent={'center'} px={'8'} space={'4'}>
+      <Input
+        placeholder={'code'}
         keyboardType={'numeric'}
         textContentType={'oneTimeCode'}
         autoFocus
-        onSubmitEditing={isNewUser ? focusOnNameInput : onVerifyPress}
-        returnKeyType={isNewUser ? 'next' : 'go'}
+        onSubmitEditing={isUserNew ? focusOnNameInput : onVerifyPress}
+        returnKeyType={isUserNew ? 'next' : 'go'}
         value={verificationCode}
         onChangeText={onVerificationCodeChangeText}
-        mode={'flat'}
       />
-      {isNewUser && (
-        <TextInput
-          label={'name'}
+      {isUserNew && (
+        <Input
+          placeholder={'name'}
           keyboardType={'ascii-capable'}
           textContentType={'username'}
           onSubmitEditing={onVerifyPress}
           returnKeyType={'go'}
           value={name}
           onChangeText={onNameChangeText}
-          style={styles.nameTextInput}
-          mode={'flat'}
           ref={nameInputRef}
         />
       )}
-      <Button
-        onPress={onVerifyPress}
-        loading={isLoading}
-        mode={'contained'}
-        style={styles.verifyButton}
-        contentStyle={styles.verifyButtonContent}>
-        Verify
+      <Button onPress={onVerifyPress} isLoading={isLoading}>
+        {'Verify'}
       </Button>
-    </View>
+    </Column>
   );
 };

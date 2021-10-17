@@ -1,19 +1,18 @@
-import * as React from 'react';
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
+import type {FC} from 'react';
 import {useDispatch} from 'react-redux';
 import {
   currentUserActions,
   useUpsertVerificationMutation,
 } from '@store/current-user';
-import LoginView from './login.view';
 import {useShallowPickSelector} from '@hooks/useSelector';
-import {useRootNavigation} from '@containers/root.router';
+import type {RootRouterProps} from '@containers/root.router';
+import {LoginView} from './login.view';
 
-export default () => {
+export const LoginContainer: FC<RootRouterProps<'login'>> = ({navigation}) => {
   const [isCountryCodeModalVisible, setIsCountryCodeModalVisible] =
     useState<boolean>(false);
 
-  const rootNavigation = useRootNavigation();
   const dispatch = useDispatch();
   const {countryCode, mobile} = useShallowPickSelector('currentUser', [
     'countryCode',
@@ -49,7 +48,7 @@ export default () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      rootNavigation.navigate('verification', {isUserNew: data.isUserNew});
+      navigation.navigate('verification', {isUserNew: data.isUserNew});
     }
   }, [isSuccess, data]);
 

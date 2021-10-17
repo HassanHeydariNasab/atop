@@ -1,22 +1,20 @@
-import * as React from 'react';
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
+import type {FC} from 'react';
 import {useDispatch} from 'react-redux';
 import {
   currentUserActions,
   useGetCurrentUserQuery,
   useUpsertUserMutation,
 } from '@store/current-user';
-import VerificationView from './verification.view';
 import {useShallowPickSelector} from '@hooks/useSelector';
-import {RootRouterProps, useRootNavigation} from '@containers/root.router';
-import AsyncStorage from '@react-native-community/async-storage';
+import {RootRouterProps} from '@containers/root.router';
+import {VerificationView} from './verification.view';
 
-export default ({
+export const VerificationContainer: FC<RootRouterProps<'verification'>> = ({
   route: {
     params: {isUserNew},
   },
-}: RootRouterProps<'verification'>) => {
-  const rootNavigation = useRootNavigation();
+}) => {
   const dispatch = useDispatch();
   const {countryCode, mobile, verificationCode, name, token} =
     useShallowPickSelector('currentUser', [
@@ -61,7 +59,6 @@ export default ({
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(currentUserActions.setToken(data.token));
-      AsyncStorage.setItem('token', data.token);
     }
   }, [isSuccess, data]);
 

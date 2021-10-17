@@ -1,7 +1,6 @@
-import * as React from 'react';
-import {View, Text} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
-import {styles} from './write.styles';
+import React from 'react';
+import type {FC} from 'react';
+import {Button, Column, Input} from 'native-base';
 
 interface WriteViewProps {
   text: string;
@@ -9,28 +8,26 @@ interface WriteViewProps {
   onCreatePostPress: () => void;
   isLoading: boolean;
 }
-export default ({
+export const WriteView: FC<WriteViewProps> = ({
   text,
   onTextChangeText,
   onCreatePostPress,
   isLoading,
-}: WriteViewProps) => {
+}) => {
   return (
-    <View style={styles.container}>
-      <TextInput
-        label={'new post'}
+    <Column flexGrow={1} justifyContent={'center'} px={'8'} space={'4'}>
+      <Input
         placeholder={'write something interesting...'}
         keyboardType={'default'}
         autoFocus
         value={text}
         onChangeText={onTextChangeText}
-        style={styles.mobileTextInput}
-        mode={'outlined'}
         multiline
+        numberOfLines={10}
       />
-      <Button onPress={onCreatePostPress} loading={isLoading}>
+      <Button onPress={onCreatePostPress} isLoading={isLoading}>
         Create
       </Button>
-    </View>
+    </Column>
   );
 };

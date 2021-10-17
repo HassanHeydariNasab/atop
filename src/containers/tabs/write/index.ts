@@ -1,1 +1,1 @@
-export {default as Write} from './write.container';
+export {WriteContainer as WriteScreen} from './write.container';

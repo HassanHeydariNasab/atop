@@ -1,10 +1,8 @@
-import * as React from 'react';
-import {View, FlatList} from 'react-native';
-import {ActivityIndicator, Text} from 'react-native-paper';
+import React from 'react';
+import type {FC} from 'react';
+import {Column, FlatList, Spinner, Text} from 'native-base';
 import {PostItem} from '@components/molecules';
 import {Post} from '@store/post/post.model';
-import {styles} from './home.styles';
-import {SCALE_24} from '@styles/spacing';
 
 interface HomeViewProps {
   isLoading: boolean;
@@ -14,28 +12,26 @@ interface HomeViewProps {
   refreshing: boolean;
   onRefresh: () => void;
 }
-export default ({
+export const HomeView: FC<HomeViewProps> = ({
   isLoading,
   posts,
   onEndReached,
   extraData,
   refreshing,
   onRefresh,
-}: HomeViewProps) => {
+}) => {
   return (
-    <View style={styles.container}>
+    <Column flexGrow={1}>
       <FlatList
         data={posts}
         renderItem={({item}) => <PostItem post={item} />}
         onEndReached={onEndReached}
         extraData={extraData}
-        ListFooterComponent={
-          <ActivityIndicator animating={isLoading} style={{margin: SCALE_24}} />
-        }
-        ListEmptyComponent={isLoading ? undefined : <Text>Nothing!</Text>}
+        ListFooterComponent={<Spinner animating={isLoading} />}
+        ListEmptyComponent={isLoading ? undefined : <Text>{'Nothing!'}</Text>}
         refreshing={refreshing}
         onRefresh={onRefresh}
       />
-    </View>
+    </Column>
   );
 };

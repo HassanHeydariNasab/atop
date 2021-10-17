@@ -1,33 +1,27 @@
-import * as React from 'react';
-import {Card, Text} from 'react-native-paper';
+import React from 'react';
+import type {FC} from 'react';
 import type {Post} from '@store/post/post.model';
-import {StyleSheet, ViewStyle} from 'react-native';
-import {SCALE_4, SCALE_8} from '@styles/spacing';
+import type {ViewStyle} from 'react-native';
+import {Column, Text} from 'native-base';
 
 interface PostProps {
   post: Post;
   containerStyle?: ViewStyle;
 }
-export const PostItem = ({
+export const PostItem: FC<PostProps> = ({
   post: {text, userName},
   containerStyle,
-}: PostProps) => {
+}) => {
   return (
-    <Card style={[containerStyle, styles.containerStyle]}>
-      <Card.Title title={userName} />
-      <Card.Content>
-        <Text style={styles.text}>{text}</Text>
-      </Card.Content>
-    </Card>
+    <Column
+      style={containerStyle}
+      borderWidth={'1px'}
+      m={'2'}
+      p={'2'}
+      borderColor={'gray.300'}
+      borderRadius={'8'}>
+      <Text>{userName}</Text>
+      <Text textAlign={'auto'}>{text}</Text>
+    </Column>
   );
 };
-
-const styles = StyleSheet.create({
-  containerStyle: {
-    marginTop: SCALE_8,
-    marginHorizontal: SCALE_4,
-  },
-  text: {
-    textAlign: 'auto',
-  },
-});

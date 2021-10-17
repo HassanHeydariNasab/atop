@@ -1,18 +1,18 @@
+import React from 'react';
+import type {FC} from 'react';
+import {Column, Spinner, Text} from 'native-base';
 import {User} from '@store/user';
-import * as React from 'react';
-import {View, Text} from 'react-native';
-import {ActivityIndicator} from 'react-native-paper';
 import {styles} from './profile.styles';
 
-interface HomeViewProps {
+interface ProfileViewProps {
   isLoading: boolean;
   user?: User;
 }
-export default ({isLoading, user}: HomeViewProps) => {
+export const ProfileView: FC<ProfileViewProps> = ({isLoading, user}) => {
   return (
-    <View style={styles.container}>
+    <Column style={styles.container}>
       {user && <Text>Hello {user.name}</Text>}
-      <ActivityIndicator animating={isLoading} />
-    </View>
+      <Spinner animating={isLoading} />
+    </Column>
   );
 };

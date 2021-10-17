@@ -1,12 +1,7 @@
-import * as React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {ActivityIndicator} from 'react-native-paper';
-import {styles} from './splash.styles';
+import React from 'react';
+import type {FC} from 'react';
+import {View} from 'native-base';
 
-export default () => {
-  return (
-    <View style={styles.display}>
-      <ActivityIndicator />
-    </View>
-  );
+export const SplashView: FC = () => {
+  return <View flexGrow={1}></View>;
 };

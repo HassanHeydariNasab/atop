@@ -28,7 +28,8 @@ export const currentUserApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, {getState}) => {
-      const token = (getState() as RootState).currentUser.token;
+      const token = (getState() as RootState).persistedReducer.currentUser
+        .token;
       if (token) {
         headers.set('authorization', `${token}`);
       }

@@ -1,13 +1,14 @@
-import * as React from 'react';
+import React from 'react';
+import type {FC} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {
-  BottomTabNavigationProp,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Home} from './home';
-import {Write} from './write';
-import {Profile} from './profile';
+import type {RouteProp} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import type {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {Icon} from '@components/atoms';
+import type {RootRouterProps} from '@containers/root.router';
+import {HomeScreen} from './home';
+import {WriteScreen} from './write';
+import {ProfileScreen} from './profile';
 
 export type TabsRouterParams = {
   home: {};
@@ -17,7 +18,18 @@ export type TabsRouterParams = {
 
 const Tab = createBottomTabNavigator<TabsRouterParams>();
 
-export default () => {
+export interface RouteProps<
+  T extends Record<string, object | undefined>,
+  K extends keyof T,
+> {
+  navigation: BottomTabNavigationProp<T, K>;
+  route: RouteProp<T, K>;
+}
+
+export interface TabsRouterProps<K extends keyof TabsRouterParams>
+  extends RouteProps<TabsRouterParams, K> {}
+
+export const TabsRouter: FC<RootRouterProps<'tabs'>> = () => {
   return (
     <Tab.Navigator
       initialRouteName="home"
@@ -35,9 +47,9 @@ export default () => {
         tabBarShowLabel: false,
         headerShown: false,
       })}>
-      <Tab.Screen name="home" component={Home} />
-      <Tab.Screen name="write" component={Write} />
-      <Tab.Screen name="profile" component={Profile} />
+      <Tab.Screen name="home" component={HomeScreen} />
+      <Tab.Screen name="write" component={WriteScreen} />
+      <Tab.Screen name="profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };
