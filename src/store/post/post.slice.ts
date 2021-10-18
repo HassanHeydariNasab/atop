@@ -27,7 +27,7 @@ export const postSlice = createSlice({
     incrementOffset: (state, action: PayloadAction<void>) => {
       state.offset += state.limit;
     },
-    resetOffset: (state, action: PayloadAction<void>) => {
+    resetPostsAndOffset: (state, action: PayloadAction<void>) => {
       state.offset = 0;
       state.posts = [];
     },

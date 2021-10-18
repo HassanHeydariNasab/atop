@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import type {FC} from 'react';
 import {batch, useDispatch} from 'react-redux';
+import {useNetInfo} from '@react-native-community/netinfo';
 import {useShallowPickSelector} from '@hooks/useSelector';
 import {postActions, postApiUtil, useGetPostsQuery} from '@store/post';
 import {HomeView} from './home.view';
@@ -28,7 +29,6 @@ export const HomeContainer: FC<TabsRouterProps<'home'>> = () => {
 
   useEffect(() => {
     if (data) {
-      console.log({offset, d: data.results});
       dispatch(postActions.appendPosts(data.results));
       dispatch(postActions.unsetIsRefreshing());
     }
@@ -41,14 +41,21 @@ export const HomeContainer: FC<TabsRouterProps<'home'>> = () => {
   const onRefresh = () => {
     batch(() => {
       dispatch(postApiUtil.resetApiState());
-      dispatch(postActions.resetOffset());
+      dispatch(postActions.resetPostsAndOffset());
       dispatch(postActions.setIsRefreshing());
     });
   };
 
+  const {isConnected} = useNetInfo();
+  useEffect(() => {
+    if (isConnected) {
+      onRefresh();
+    }
+  }, [isConnected]);
+
   return (
     <HomeView
-      isLoading={isFetching}
+      isLoading={isFetching && !isRefreshing}
       posts={posts}
       onEndReached={onEndReached}
       extraData={extraData}

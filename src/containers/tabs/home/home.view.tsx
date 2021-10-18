@@ -39,7 +39,7 @@ export const HomeView: FC<HomeViewProps> = ({
         renderItem={({item}) => <PostItem post={item} />}
         ItemSeparatorComponent={() => <Divider />}
         ListFooterComponent={<Spinner animating={isLoading} />}
-        ListFooterComponentStyle={{marginBottom: 36}}
+        ListFooterComponentStyle={{marginBottom: 54}}
         refreshing={refreshing}
         onRefresh={onRefresh}
       />
