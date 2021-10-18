@@ -8,7 +8,7 @@ import {theme} from '@styles/theme';
 import {persistor, store} from '@store/index';
 import {RootRouter} from '@containers/root.router';
 
-LogBox.ignoreLogs([/Listener/]);
+LogBox.ignoreLogs([/Listener|contrast/]);
 
 export const App: FC<{}> = ({}) => {
   return (

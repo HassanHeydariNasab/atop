@@ -7,8 +7,9 @@ export const theme = extendTheme({
     darkBackground: defaultTheme.colors.gray[900],
     grayText: defaultTheme.colors.gray[300],
   },
-  fontConfig: {
-    heading: 'Vazir-Bold',
-    body: 'Vazir-Regular',
+  fonts: {
+    bold: 'Vazir-Bold',
+    medium: 'Vazir-Medium',
+    regular: 'Vazir-Regular',
   },
 });

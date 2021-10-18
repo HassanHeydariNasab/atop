@@ -1,6 +1,6 @@
 import React from 'react';
 import type {FC} from 'react';
-import {Column, Divider, FlatList, Input, Spinner} from 'native-base';
+import {Column, Divider, FlatList, Input, Spinner, View} from 'native-base';
 import {PostItem} from '@components/molecules';
 import {Post} from '@store/post/post.model';
 import {Icon} from '@components/atoms';
@@ -30,6 +30,7 @@ export const HomeView: FC<HomeViewProps> = ({
         px={'4'}
         size={'md'}
         borderBottomWidth={'2'}
+        bg={'white'}
       />
       <FlatList
         data={posts}
@@ -38,6 +39,7 @@ export const HomeView: FC<HomeViewProps> = ({
         renderItem={({item}) => <PostItem post={item} />}
         ItemSeparatorComponent={() => <Divider />}
         ListFooterComponent={<Spinner animating={isLoading} />}
+        ListFooterComponentStyle={{marginBottom: 36}}
         refreshing={refreshing}
         onRefresh={onRefresh}
       />

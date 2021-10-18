@@ -1,36 +1,46 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import type {FC} from 'react';
-import {Column, IconButton, Row, Text} from 'native-base';
+import {TouchableOpacity} from 'react-native';
+import {Column, Row, Spinner, Text} from 'native-base';
 import {format} from 'timeago.js';
 import type {Post} from '@store/post/post.model';
 import {Icon} from '@components/atoms';
-import {TouchableOpacity} from 'react-native';
+import {useLikePostMutation} from '@store/post';
 
 interface PostProps {
   post: Post;
-  onPressLike: () => void;
 }
 export const PostItem: FC<PostProps> = ({
-  post: {text, userName, creationDate},
-  onPressLike,
+  post: {id, text, userName, creationDate, liked},
 }) => {
+  const [likePost, {data, isLoading}] = useLikePostMutation();
+  const onPressLike = () => {
+    likePost({id});
+  };
+  const _liked = useMemo(() => {
+    return data ? data.liked : liked;
+  }, [data, liked]);
   return (
-    <Column p={'2'} mt={'2'} mx={'2'}>
+    <Column p={'4'} mt={'2'} space={'4'}>
       <Row space={'2'}>
-        <Text fontFamily={'Vazir-Bold'} mb={'2'}>
-          {userName}
-        </Text>
-        <Text
-          color={'grayText'}
-          fontWeight={'medium'}
-          fontFamily={'Vazir-Medium'}>
+        <Text fontFamily={'bold'}>{userName}</Text>
+        <Text color={'grayText'} fontWeight={'medium'} fontFamily={'medium'}>
           {format(new Date(creationDate))}
         </Text>
       </Row>
-      <Text fontFamily={'Vazir-Regular'}>{text}</Text>
-      <TouchableOpacity onPress={onPressLike}>
-        <Icon name={'favorite-border'} />
-      </TouchableOpacity>
+      <Text fontFamily={'regular'}>{text}</Text>
+      <Row alignItems={'center'} space={'2'}>
+        {isLoading ? (
+          <Spinner size={'lg'} color={'grayText'} />
+        ) : (
+          <TouchableOpacity onPress={onPressLike}>
+            <Icon name={'recommend'} size={'9'} />
+          </TouchableOpacity>
+        )}
+        <Text fontFamily={'medium'} color={'grayText'}>
+          {_liked}
+        </Text>
+      </Row>
     </Column>
   );
 };

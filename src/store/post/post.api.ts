@@ -25,6 +25,10 @@ interface LikePostRequest {
   id: number;
 }
 
+interface LikePostResponse {
+  liked: number;
+}
+
 export const postApi = createApi({
   reducerPath: 'postApi',
   baseQuery: fetchBaseQuery({
@@ -46,8 +50,8 @@ export const postApi = createApi({
     createPost: builder.mutation<CreatePostResponse, CreatePostRequest>({
       query: body => ({url: '/v1/posts', method: 'POST', body}),
     }),
-    likePost: builder.mutation<void, LikePostRequest>({
-      query: id => ({
+    likePost: builder.mutation<LikePostResponse, LikePostRequest>({
+      query: ({id}) => ({
         url: `/v1/posts/${id}?action=like`,
         method: 'PATCH',
       }),
