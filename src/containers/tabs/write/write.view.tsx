@@ -5,17 +5,22 @@ import {Button, Column, Input} from 'native-base';
 interface WriteViewProps {
   text: string;
   onTextChangeText: (_text: string) => void;
-  onCreatePostPress: () => void;
+  onPublishPostPress: () => void;
   isLoading: boolean;
 }
 export const WriteView: FC<WriteViewProps> = ({
   text,
   onTextChangeText,
-  onCreatePostPress,
+  onPublishPostPress,
   isLoading,
 }) => {
   return (
-    <Column flexGrow={1} justifyContent={'center'} px={'8'} space={'4'}>
+    <Column
+      flexGrow={1}
+      justifyContent={'flex-start'}
+      px={'4'}
+      space={'4'}
+      mt={'12'}>
       <Input
         placeholder={'write something interesting...'}
         keyboardType={'default'}
@@ -23,10 +28,12 @@ export const WriteView: FC<WriteViewProps> = ({
         value={text}
         onChangeText={onTextChangeText}
         multiline
-        numberOfLines={10}
+        numberOfLines={15}
+        textAlignVertical={'top'}
+        size={'md'}
       />
-      <Button onPress={onCreatePostPress} isLoading={isLoading}>
-        Create
+      <Button onPress={onPublishPostPress} isLoading={isLoading}>
+        {'Publish'}
       </Button>
     </Column>
   );

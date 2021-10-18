@@ -46,6 +46,7 @@ export const TabsRouter: FC<RootRouterProps<'tabs'>> = () => {
         },
         tabBarShowLabel: false,
         headerShown: false,
+        tabBarHideOnKeyboard: true,
       })}>
       <Tab.Screen name="home" component={HomeScreen} />
       <Tab.Screen name="write" component={WriteScreen} />

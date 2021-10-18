@@ -2,12 +2,15 @@ import React from 'react';
 import type {FC} from 'react';
 import {useDispatch} from 'react-redux';
 import {useGetCurrentUserQuery} from '@store/current-user';
-import {useTabsNavigation} from '../tabs.router';
 import type {TabsRouterProps} from '../tabs.router';
 import {ProfileView} from './profile.view';
+import {persistor} from '@store/index';
 
 export const ProfileContainer: FC<TabsRouterProps<'profile'>> = () => {
   const dispatch = useDispatch();
   const {isLoading, data} = useGetCurrentUserQuery();
-  return <ProfileView isLoading={isLoading} user={data} />;
+  const onPressLogout = () => {
+    persistor.purge();
+  };
+  return <ProfileView {...{isLoading, user: data, onPressLogout}} />;
 };

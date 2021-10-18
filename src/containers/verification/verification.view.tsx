@@ -49,7 +49,14 @@ export const VerificationView: FC<VerificationViewProps> = ({
           ref={nameInputRef}
         />
       )}
-      <Button onPress={onVerifyPress} isLoading={isLoading}>
+      <Button
+        onPress={onVerifyPress}
+        isLoading={isLoading}
+        isDisabled={
+          isUserNew
+            ? name === '' || verificationCode === ''
+            : verificationCode === ''
+        }>
         {'Verify'}
       </Button>
     </Column>

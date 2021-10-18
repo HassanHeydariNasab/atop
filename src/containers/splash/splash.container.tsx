@@ -14,9 +14,15 @@ export const SplashContainer: FC<RootRouterProps<'splash'>> = ({
   useEffect(() => {
     if (rehydrated) {
       if (token) {
-        navigation.navigate('tabs', {});
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'tabs'}],
+        });
       } else {
-        navigation.navigate('login', {});
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'login'}],
+        });
       }
     }
   }, [rehydrated, token]);

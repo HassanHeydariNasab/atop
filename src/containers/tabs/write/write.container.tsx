@@ -23,7 +23,7 @@ export const WriteContainer: FC<TabsRouterProps<'write'>> = () => {
   useEffect(() => {
     if (isSuccess) {
       batch(() => {
-        toast.show({title: 'done', description: 'posted successfully'});
+        toast.show({title: 'Published!'});
         dispatch(postActions.setText(''));
       });
     }
@@ -33,7 +33,7 @@ export const WriteContainer: FC<TabsRouterProps<'write'>> = () => {
     <WriteView
       text={text || ''}
       onTextChangeText={onTextChangeText}
-      onCreatePostPress={onCreatePostPress}
+      onPublishPostPress={onCreatePostPress}
       isLoading={isLoading}
     />
   );

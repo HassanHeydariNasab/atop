@@ -54,7 +54,10 @@ export const LoginView: FC<LoginViewProps> = ({
         onSubmitEditing={onLoginPress}
         returnKeyType={'next'}
       />
-      <Button onPress={onLoginPress} isLoading={isLoading}>
+      <Button
+        onPress={onLoginPress}
+        isLoading={isLoading}
+        isDisabled={mobile === ''}>
         Login
       </Button>
       <Modal

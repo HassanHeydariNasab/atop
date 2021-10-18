@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import type {FC} from 'react';
-import {useDispatch} from 'react-redux';
+import {batch, useDispatch} from 'react-redux';
 import {
   currentUserActions,
   useGetCurrentUserQuery,
@@ -11,6 +11,7 @@ import {RootRouterProps} from '@containers/root.router';
 import {VerificationView} from './verification.view';
 
 export const VerificationContainer: FC<RootRouterProps<'verification'>> = ({
+  navigation,
   route: {
     params: {isUserNew},
   },
@@ -58,7 +59,16 @@ export const VerificationContainer: FC<RootRouterProps<'verification'>> = ({
 
   useEffect(() => {
     if (isSuccess && data) {
-      dispatch(currentUserActions.setToken(data.token));
+      batch(() => {
+        dispatch(currentUserActions.setToken(data.token));
+        dispatch(currentUserActions.setVerificationCode(''));
+        dispatch(currentUserActions.setName(''));
+        dispatch(currentUserActions.setMobile(''));
+      });
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'tabs'}],
+      });
     }
   }, [isSuccess, data]);
 

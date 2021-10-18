@@ -4,6 +4,7 @@ import {
   DefaultTheme,
   NavigationContainer,
   useNavigation,
+  createNavigationContainerRef,
 } from '@react-navigation/native';
 import type {RouteProp} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -12,7 +13,7 @@ import {StatusBar, useColorMode} from 'native-base';
 import {LoginScreen} from '@containers/login';
 import {VerificationScreen} from '@containers/verification';
 import {SplashScreen} from '@containers/splash';
-import {TabsRouter} from '@containers/tabs/tabs.router';
+import {TabsRouter, TabsRouterParams} from '@containers/tabs/tabs.router';
 import {theme} from '@styles/theme';
 
 export type RootRouterParams = {
@@ -53,15 +54,27 @@ const navigationDarkTheme = {
   },
 };
 
+export const navigationRef = createNavigationContainerRef<
+  RootRouterParams & TabsRouterParams
+>();
+
+export function navigate(
+  name: keyof (RootRouterParams & TabsRouterParams),
+  params: object,
+) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
+  }
+}
+
 const Stack = createNativeStackNavigator<RootRouterParams>();
 
 export const RootRouter = () => {
   const {colorMode} = useColorMode();
   return (
     <NavigationContainer
-      theme={
-        colorMode === 'light' ? navigationLightTheme : navigationDarkTheme
-      }>
+      theme={colorMode === 'light' ? navigationLightTheme : navigationDarkTheme}
+      ref={navigationRef}>
       <StatusBar
         backgroundColor={
           colorMode === 'light'

@@ -1,8 +1,9 @@
 import React from 'react';
 import type {FC} from 'react';
-import {Column, FlatList, Spinner, Text} from 'native-base';
+import {Column, Divider, FlatList, Input, Spinner} from 'native-base';
 import {PostItem} from '@components/molecules';
 import {Post} from '@store/post/post.model';
+import {Icon} from '@components/atoms';
 
 interface HomeViewProps {
   isLoading: boolean;
@@ -22,13 +23,21 @@ export const HomeView: FC<HomeViewProps> = ({
 }) => {
   return (
     <Column flexGrow={1}>
+      <Input
+        placeholder={'Type to explore'}
+        variant={'underlined'}
+        InputLeftElement={<Icon name={'search'} size={'6'} ml={'4'} />}
+        px={'4'}
+        size={'md'}
+        borderBottomWidth={'2'}
+      />
       <FlatList
         data={posts}
-        renderItem={({item}) => <PostItem post={item} />}
         onEndReached={onEndReached}
         extraData={extraData}
+        renderItem={({item}) => <PostItem post={item} />}
+        ItemSeparatorComponent={() => <Divider />}
         ListFooterComponent={<Spinner animating={isLoading} />}
-        ListEmptyComponent={isLoading ? undefined : <Text>{'Nothing!'}</Text>}
         refreshing={refreshing}
         onRefresh={onRefresh}
       />

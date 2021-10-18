@@ -3,9 +3,7 @@ import type {FC} from 'react';
 import {batch, useDispatch} from 'react-redux';
 import {useShallowPickSelector} from '@hooks/useSelector';
 import {postActions, postApiUtil, useGetPostsQuery} from '@store/post';
-import {Post} from '@store/post/post.model';
 import {HomeView} from './home.view';
-import {currentUserActions} from '@store/current-user';
 import type {TabsRouterProps} from '../tabs.router';
 
 export const HomeContainer: FC<TabsRouterProps<'home'>> = () => {
@@ -16,7 +14,7 @@ export const HomeContainer: FC<TabsRouterProps<'home'>> = () => {
     'posts',
     'isRefreshing',
   ]);
-  const {isLoading, isFetching, isSuccess, data, refetch} = useGetPostsQuery({
+  const {isFetching, data} = useGetPostsQuery({
     offset,
     limit,
   });
