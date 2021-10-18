@@ -4,8 +4,8 @@ export interface Post {
   text: string;
   liked: number;
   userName: string;
+  creationDate: string;
   // admin view only
   isActive?: boolean;
-  isReported?: boolean;
   reported?: number;
 }

@@ -8,6 +8,7 @@ interface ProfileViewProps {
   isLoading: boolean;
   user?: User;
   onPressLogout: () => void;
+  onToggleTheme: () => void;
 }
 export const ProfileView: FC<ProfileViewProps> = ({
   isLoading,
