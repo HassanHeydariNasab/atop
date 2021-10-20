@@ -15,7 +15,7 @@ export const HomeContainer: FC<TabsRouterProps<'home'>> = () => {
     'posts',
     'isRefreshing',
   ]);
-  const {isFetching, data} = useGetPostsQuery({
+  const {isFetching, data, isError} = useGetPostsQuery({
     offset,
     limit,
   });
@@ -52,6 +52,12 @@ export const HomeContainer: FC<TabsRouterProps<'home'>> = () => {
       onRefresh();
     }
   }, [isConnected]);
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(postActions.unsetIsRefreshing());
+    }
+  }, [isError]);
 
   return (
     <HomeView

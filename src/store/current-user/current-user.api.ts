@@ -61,4 +61,5 @@ export const {
   useGetCurrentUserQuery,
   useUpsertVerificationMutation,
   useUpsertUserMutation,
+  util: currentUserApiUtil,
 } = currentUserApi;

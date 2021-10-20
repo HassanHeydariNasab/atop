@@ -22,16 +22,7 @@ export const HomeView: FC<HomeViewProps> = ({
   onRefresh,
 }) => {
   return (
-    <Column flexGrow={1}>
-      <Input
-        placeholder={'Type to explore'}
-        variant={'underlined'}
-        InputLeftElement={<Icon name={'search'} size={'6'} ml={'4'} />}
-        px={'4'}
-        size={'md'}
-        borderBottomWidth={'2'}
-        bg={'white'}
-      />
+    <Column flexGrow={1} alignItems={'center'}>
       <FlatList
         data={posts}
         onEndReached={onEndReached}
@@ -43,6 +34,17 @@ export const HomeView: FC<HomeViewProps> = ({
         refreshing={refreshing}
         onRefresh={onRefresh}
       />
+      <Column position={'absolute'} top={'10'} opacity={'0.7'} width={'80%'}>
+        <Input
+          placeholder={'Type to explore'}
+          variant={'rounded'}
+          InputLeftElement={<Icon name={'search'} size={'6'} ml={'4'} />}
+          px={'4'}
+          size={'md'}
+          bg={'white'}
+          borderWidth={'4'}
+        />
+      </Column>
     </Column>
   );
 };

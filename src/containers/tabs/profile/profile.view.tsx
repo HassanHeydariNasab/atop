@@ -2,7 +2,6 @@ import React from 'react';
 import type {FC} from 'react';
 import {Button, Column, Spinner, Text} from 'native-base';
 import {User} from '@store/user';
-import {styles} from './profile.styles';
 
 interface ProfileViewProps {
   isLoading: boolean;
@@ -16,7 +15,7 @@ export const ProfileView: FC<ProfileViewProps> = ({
   onPressLogout,
 }) => {
   return (
-    <Column style={styles.container}>
+    <Column>
       {user && <Text>Hello {user.name}</Text>}
       {user && <Text>{`${user.coins} coins`}</Text>}
       <Button onPress={onPressLogout}>{'logout'}</Button>
